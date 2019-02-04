@@ -62,6 +62,7 @@ public class Main extends Sprite
     stage.color = _config.bgColor;
     stage.scaleMode = StageScaleMode.NO_SCALE;
     stage.align = StageAlign.TOP_LEFT;
+    stage.addEventListener(MouseEvent.CLICK, _onStageMouseDown);
 
     if (_config.imageUrl != null) {
       _imageLoader = new Loader();
@@ -81,6 +82,7 @@ public class Main extends Sprite
     addChild(_overlay);
 
     _control = new ControlBar(_config.fullscreen, _config.menu);
+    _control.visible = false
     _control.style = _config.style;
     _control.playButton.addEventListener(MouseEvent.CLICK, onPlayPauseClick);
     _control.volumeSlider.addEventListener(Slider.CLICK, onVolumeSliderClick);
@@ -134,6 +136,12 @@ public class Main extends Sprite
       ExternalInterface.addCallback("VGAPlayerAddMenuItem", externalAddMenuItem);
       ExternalInterface.addCallback("VGAPlayerConnect", externalConnect);
     }
+  }
+
+  private function _onStageMouseDown(e:MouseEvent):void
+  {
+    log(e);
+    ExternalInterface.call("callToJS",e.localX,e.localY);
   }
 
   private function log(... args):void
@@ -370,6 +378,7 @@ public class Main extends Sprite
 
   private function onOverlayClick(e:MouseEvent):void 
   {  
+    log("onOverlayClick:", e.target);
     var overlay:OverlayButton = OverlayButton(e.target);
     overlay.show();
     setPlayState(overlay.state == overlay.PLAY);
@@ -546,8 +555,8 @@ public class Main extends Sprite
     _control.y = stage.stageHeight-_control.height;
 
     _debugdisp.resize(stage.stageWidth, stage.stageHeight-_control.height);
-    _debugdisp.x = 0;
-    _debugdisp.y = 0;
+    _debugdisp.x = 30;
+    _debugdisp.y = 30;
   }
 
   private function update():void

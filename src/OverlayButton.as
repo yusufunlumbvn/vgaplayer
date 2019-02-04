@@ -135,7 +135,7 @@ public class OverlayButton extends Sprite
   {
     if (_invalidated) {
       _invalidated = false;
-      repaint();
+      //repaint();
     }
 
     if (_autohide) {
